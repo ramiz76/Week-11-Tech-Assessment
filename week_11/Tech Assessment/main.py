@@ -68,18 +68,18 @@ def read_dict_file():
         return f.readlines()
 
 
-def find_valid_words(dictionary: list[str], tiles: list) -> list:
-    valid_words = []
-    word = "".join(tiles)
-    for valid in dictionary:
-        checking_valid = valid.upper().strip()
-        checking_valid = sorted(checking_valid)
+# def find_valid_words(dictionary: list[str], tiles: list) -> list:
+#     valid_words = []
+#     word = "".join(tiles)
+#     for valid in dictionary:
+#         checking_valid = valid.upper().strip()
+#         checking_valid = sorted(checking_valid)
 
-        if checking_valid == sorted(tiles[0]) or checking_valid == sorted(tiles[:2]) or checking_valid == sorted(tiles[:3]):
-            valid_words.append(valid.strip())
-        if checking_valid == sorted(tiles[:4]) or checking_valid == sorted(tiles[:5]) or checking_valid == sorted(tiles[:6]) or checking_valid == sorted(tiles):
-            valid_words.append(valid.strip())
-    return valid_words
+#         if checking_valid == sorted(tiles[0]) or checking_valid == sorted(tiles[:2]) or checking_valid == sorted(tiles[:3]):
+#             valid_words.append(valid.strip())
+#         if checking_valid == sorted(tiles[:4]) or checking_valid == sorted(tiles[:5]) or checking_valid == sorted(tiles[:6]) or checking_valid == sorted(tiles):
+#             valid_words.append(valid.strip())
+#     return valid_words
 
 
 def find_valid_words(dictionary: list[str], tiles: list) -> list:
@@ -121,6 +121,7 @@ if __name__ == "__main__":
     print(starting_tiles)
     valid_words = find_valid_words(dictionary, starting_tiles)
     if valid_words:
+        print(f'All available words: {valid_words}')
         print(f'Longest word: {find_longest_valid_word(valid_words)}')
         print(f'Best word: {find_highest_scoring_word(valid_words)}')
 
