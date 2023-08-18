@@ -1,4 +1,4 @@
-from main import caclulate_score_for_word, assign_score_to_letter, assign_starting_tiles
+from main import calculate_score_for_word, assign_score_to_letter, assign_starting_tiles, check_letter_count, create_alphabet, assign_starting_tiles_with_distribution, random_generator
 
 
 def test_assign_score_returns_int():
@@ -21,13 +21,13 @@ def test_assign_score_when_letter_is_G():
 
 def test_calculate_score_returns_int():
     word = 'GUARDIAN'
-    result = caclulate_score_for_word(word)
+    result = calculate_score_for_word(word)
     assert isinstance(result, int)
 
 
 def test_calculate_score_returns_valid_output():
     word = 'GUARDIAN'
-    result = caclulate_score_for_word(word)
+    result = calculate_score_for_word(word)
     assert result == 10
 
 
@@ -36,5 +36,19 @@ def test_assign_seven_tiles_with_dist_returns_list():
     assert isinstance(result, list)
 
 
+def test_letter_count_returns_bool():
+    alphabet = create_alphabet()
+    result = check_letter_count(alphabet, 'A')
+    assert isinstance(result, int)
 
-    
+
+def test_letter_count_if_letter_is_A():
+    alphabet = create_alphabet()
+    result = check_letter_count(alphabet, 'A')
+    assert result == True
+
+
+def test_assign_starting_with_dist_returns_list():
+    result = assign_starting_tiles_with_distribution()
+    assert isinstance(result, list)
+

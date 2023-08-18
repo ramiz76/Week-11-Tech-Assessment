@@ -10,7 +10,7 @@ def assign_score_to_letter(letter) -> int:
     return alphabet[letter]
 
 
-def caclulate_score_for_word(word: str) -> int:
+def calculate_score_for_word(word: str) -> int:
     points = 0
     for letter in word:
         letter = letter.upper()
@@ -29,27 +29,81 @@ def assign_starting_tiles() -> list:
     return player_hand
 
 
-def assign_startling_tiles_with_distribution() -> list:
-    """Player starts with 7 tiles and this function assigns 7 random tiles to them based on distribution"""
+def random_generator():
+    random_letter = random.choice(string.ascii_letters).upper()
+    return random_letter
 
-    alphabet = {"A": 9, "B": 2, "C": 2, "D": 4, "E": 12, "F": 2, "G": 3,
-                "H": 2, "I": 9, "J": 1, "K": 1, "L": 4, "M": 2, "N": 6,
-                "O": 8, "P": 2, "Q": 1, "R": 6, "S": 4, "T": 6, "U": 4,
-                "V": 2, "W": 2, "X": 1, "Y": 2, "Z": 1}
+
+def assign_starting_tiles_with_distribution() -> list:
+    """Player starts with 7 tiles and this function assigns 7 random tiles to them based on distribution"""
+    alphabet = create_alphabet()
     player_hand = []
     for i in range(7):
         valid = False
         while valid == False:
-            random_letter = random.choice(string.ascii_letters)
-            random_letter = random_letter.upper()
-            if alphabet[random_letter] > 0:
+            random_letter = random_generator()
+            if check_letter_count(alphabet, random_letter):
                 alphabet[random_letter] = alphabet[random_letter]-1
                 player_hand.append(random_letter)
                 valid = True
-                print(alphabet)
-
     return player_hand
 
 
+def check_letter_count(alphabet, random_letter) -> bool:
+    if alphabet[random_letter] > 0:
+        return True
+    return False
+
+
+def create_alphabet():
+    alphabet = {"A": 9, "B": 2, "C": 2, "D": 4, "E": 12, "F": 2, "G": 3,
+                "H": 2, "I": 9, "J": 1, "K": 1, "L": 4, "M": 2, "N": 6,
+                "O": 8, "P": 2, "Q": 1, "R": 6, "S": 4, "T": 6, "U": 4,
+                "V": 2, "W": 2, "X": 1, "Y": 2, "Z": 1}
+    return alphabet
+
+
+def read_dict_file():
+    with open('dictionary.txt', 'r') as f:
+        return f.readlines()
+
+
+def find_valid_words(dictionary: list[str], starting_tiles: list) -> list:
+    valid_words = []
+    word = "".join(starting_tiles)
+    for valid in dictionary:
+        valid = valid.upper()
+        if sorted(valid) == sorted(word):
+            valid_words.append(valid)
+    return valid_words
+
+
+def find_valid_words(dictionary: list[str], tiles: list) -> list:
+    valid_words = []
+    word = "".join(tiles)
+    for valid in dictionary:
+        checking_valid = valid.upper().strip()
+        checking_valid = sorted(checking_valid)
+
+        if checking_valid == sorted(tiles[0]) or checking_valid == sorted(tiles[:2]) or checking_valid == sorted(tiles[:3]):
+            valid_words.append(valid)
+        if checking_valid == sorted(tiles[:4]) or checking_valid == sorted(tiles[:5]) or checking_valid == sorted(tiles[:6]) or checking_valid == sorted(tiles):
+            valid_words.append(valid.strip())
+    return valid_words
+
+
+def find_longest_valid_word(valid_words):
+    longest = ""
+    for word in valid_words:
+        if len(word) > len(longest):
+            longest = word
+    return longest
+
+
 if __name__ == "__main__":
-    print(assign_startling_tiles_with_distribution())
+    dictionary = read_dict_file()
+    starting_tiles = assign_starting_tiles_with_distribution()
+    print(starting_tiles)
+    valid_words = find_valid_words(dictionary, starting_tiles)
+    print(valid_words)
+    print(find_longest_valid_word(valid_words))
