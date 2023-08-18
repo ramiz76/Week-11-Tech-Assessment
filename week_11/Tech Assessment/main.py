@@ -68,13 +68,17 @@ def read_dict_file():
         return f.readlines()
 
 
-def find_valid_words(dictionary: list[str], starting_tiles: list) -> list:
+def find_valid_words(dictionary: list[str], tiles: list) -> list:
     valid_words = []
-    word = "".join(starting_tiles)
+    word = "".join(tiles)
     for valid in dictionary:
-        valid = valid.upper()
-        if sorted(valid) == sorted(word):
-            valid_words.append(valid)
+        checking_valid = valid.upper().strip()
+        checking_valid = sorted(checking_valid)
+
+        if checking_valid == sorted(tiles[0]) or checking_valid == sorted(tiles[:2]) or checking_valid == sorted(tiles[:3]):
+            valid_words.append(valid.strip())
+        if checking_valid == sorted(tiles[:4]) or checking_valid == sorted(tiles[:5]) or checking_valid == sorted(tiles[:6]) or checking_valid == sorted(tiles):
+            valid_words.append(valid.strip())
     return valid_words
 
 
@@ -84,11 +88,10 @@ def find_valid_words(dictionary: list[str], tiles: list) -> list:
     for valid in dictionary:
         checking_valid = valid.upper().strip()
         checking_valid = sorted(checking_valid)
+        for i in range(1, 8):
+            if checking_valid == sorted(tiles[:i]):
+                valid_words.append(valid.strip())
 
-        if checking_valid == sorted(tiles[0]) or checking_valid == sorted(tiles[:2]) or checking_valid == sorted(tiles[:3]):
-            valid_words.append(valid)
-        if checking_valid == sorted(tiles[:4]) or checking_valid == sorted(tiles[:5]) or checking_valid == sorted(tiles[:6]) or checking_valid == sorted(tiles):
-            valid_words.append(valid.strip())
     return valid_words
 
 
@@ -100,10 +103,26 @@ def find_longest_valid_word(valid_words):
     return longest
 
 
+def find_highest_scoring_word(valid_words):
+    highest_word = ""
+    highest_score = 0
+    for word in valid_words:
+        if word:
+            score = calculate_score_for_word(word)
+            if score > highest_score:
+                highest_score = score
+                highest_word = word
+    return highest_word
+
+
 if __name__ == "__main__":
     dictionary = read_dict_file()
     starting_tiles = assign_starting_tiles_with_distribution()
     print(starting_tiles)
     valid_words = find_valid_words(dictionary, starting_tiles)
-    print(valid_words)
-    print(find_longest_valid_word(valid_words))
+    if valid_words:
+        print(f'Longest word: {find_longest_valid_word(valid_words)}')
+        print(f'Best word: {find_highest_scoring_word(valid_words)}')
+
+    else:
+        print("No words to create!")
